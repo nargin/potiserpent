@@ -33,4 +33,4 @@ class DiscordClient(discord.Client):
 			await message.channel.send("Hello !")
 
 		elif message.content.startswith("!pt help"):
-			await message.channel.send("Commands:\n!masteries <name>#<tagLine> - Get top 5 masteries of a summoner\n!axel - Axel is OMEGA PISSLOW NITROSTUCK\n!help - Show this message")
+			await message.channel.send("TODO")
