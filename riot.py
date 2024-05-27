@@ -1,8 +1,6 @@
 import requests
 import discord
 import random
-import json
-import os
 
 from utils import time
 
@@ -36,6 +34,10 @@ class RiotAPI:
 		for champion in champions_json["data"]:
 			champions[champions_json["data"][champion]["key"]] = champion
 		return champions
+
+	def get_current_version_ddragon(self):
+		url = "https://ddragon.leagueoflegends.com/api/versions.json"
+		return self.get_request(url, "")
 
 	def get_summoner_by_name(self, name, tagLine):
 		url = "https://europe.api.riotgames.com/"
@@ -71,7 +73,14 @@ class RiotAPI:
 		url = "https://europe.api.riotgames.com/"
 		endpoint = "/lol/match/v5/matches/{matchId}".format(matchId=match_id)
 		return self.get_request(url, endpoint)
-	
+
+	def get_champion_image(self, champion):
+		version = self.get_current_version_ddragon()[0]
+		url = "https://ddragon.leagueoflegends.com/cdn/{version}/img/champion/{champion}.png".format(version=version, champion=champion)
+		return url
+
+	# Display functions :
+
 	async def get_masteries(self, message):
 		if len(message.content.split(" ")) != 2:
 			await message.channel.send("Invalid command usage")
@@ -106,4 +115,22 @@ class RiotAPI:
 		puuid = summoner["puuid"]
 		match_id = self.get_last_match_by_puuid(puuid)
 		last_match = self.get_match_by_id(match_id[0])
-		await message.channel.send(f"Last match id: {json.dumps(last_match['metadata'], indent=4)}")
+		embed = discord.Embed(
+			title="Last match",
+			description="Last match of the summoner",
+			color=random.choice([discord.Color.blue(), discord.Color.red(), discord.Color.green(), discord.Color.orange()])
+		)
+		print(last_match["info"]["participants"])
+		for player in last_match["info"]["participants"]:
+			champion = self.champions[str(player["championId"])]
+			# if player["puuid"] == puuid:
+				# embed.add_field(
+					# add image of champon for puuid_player
+			embed.add_field(
+				name=champion,
+				value=f"KDA: {player['kills']}/{player['deaths']}/{player['assists']}",
+				inline=False
+			)
+		await message.channel.send(embed=embed)
+	
+	# skill shot hit and dodged

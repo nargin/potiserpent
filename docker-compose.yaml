@@ -2,8 +2,5 @@ services:
   bot:
     build: .
     container_name: python-bot
-    restart: always
     volumes:
       - .:/app
-    working_dir: /app
-    command: python -u start.py

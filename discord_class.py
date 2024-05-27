@@ -2,7 +2,6 @@ import discord
 import json
 import os
 
-from commands import get_masteries
 from admin import admin_panel
 from riot import RiotAPI
 from utils import time
@@ -33,4 +32,4 @@ class DiscordClient(discord.Client):
 			await message.channel.send("Hello !")
 
 		elif message.content.startswith("!pt help"):
-			await message.channel.send("TODO")
+			await message.channel.send("TODO 123")
