@@ -1,6 +1,7 @@
 import requests
 import discord
 import random
+import json
 
 from utils import time
 
@@ -133,4 +134,64 @@ class RiotAPI:
 			)
 		await message.channel.send(embed=embed)
 	
+	async def get_lolpros_game(self, message):
+		if len(message.content.split(" ")) != 2:
+			await message.channel.send("Invalid command usage")
+			return
+		name, tagLine = message.content.split(" ")[1].split("#")
+		ingame = self.get_summoner_by_name(name, tagLine)
+		url = "https://api.lolpros.gg/lol/game?query={name}&tagline={tagLine}".format(name=name, tagLine=tagLine)
+		headers = {
+			'Accept': 'application/json, text/plain, */*',
+			'LPGG-server': 'EUW',
+			'Origin': 'https://lolpros.gg',
+			'Referer': 'https://lolpros.gg/',
+		}
+		response = requests.get(url, headers=headers)
+		if (response.text is None) or (response.text == ""):
+			await message.channel.send("Player probably not in game")
+			return
+		if response.status_code >= 400:
+			reason = response.json().get("error", "Unknown error")
+			await message.channel.send("{status_code} - {reason}".format(status_code=response.status_code, reason=reason))
+			return
+		game = response.json()
+		blueTeam = discord.Embed(
+			title="Blue team",
+			description="Blue team of the game",
+			color=discord.Color.blue()
+		)
+		redTeam = discord.Embed(
+			title="Red team",
+			description="Red team of the game",
+			color=discord.Color.red()
+		)
+		for player in game["participants"]:
+			champion = self.champions[str(player["championId"])]
+			lolpros = player.get("lolpros", None)
+			if lolpros is not None:
+				team = lolpros.get('team', None)
+				value = f"Champion: {champion}\n"
+				if team is not None:
+					value += f"Team: {team["name"]}\n"
+
+				if player["teamId"] == 100:
+					blueTeam.add_field(
+						name=f":flag_{player['lolpros']['country'].lower()}: - {player['lolpros']['name']}",
+						value=value,
+						inline=False
+					)
+				elif player["teamId"] == 200:
+					redTeam.add_field(
+						name=f":flag_{player['lolpros']['country'].lower()}: - {player['lolpros']['name']}",
+						value=value,
+						inline=False
+					)
+		if blueTeam.fields != []:
+			await message.channel.send(embed=blueTeam)
+		if redTeam.fields != []:
+			await message.channel.send(embed=redTeam)
+		if blueTeam.fields == [] and redTeam.fields == []:
+			await message.channel.send("No pros found in this game")
+
 	# skill shot hit and dodged
