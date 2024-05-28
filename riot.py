@@ -111,6 +111,7 @@ class RiotAPI:
 		if len(message.content.split(" ")) != 2:
 			await message.channel.send("Invalid command usage")
 			return
+		await message.channel.send("This command is not implemented yet")
 		name, tagLine = message.content.split(" ")[1].split("#")
 		summoner = self.get_summoner_by_name(name, tagLine)
 		puuid = summoner["puuid"]
@@ -121,7 +122,7 @@ class RiotAPI:
 			description="Last match of the summoner",
 			color=random.choice([discord.Color.blue(), discord.Color.red(), discord.Color.green(), discord.Color.orange()])
 		)
-		print(last_match["info"]["participants"])
+		# print(last_match["info"]["participants"])
 		for player in last_match["info"]["participants"]:
 			champion = self.champions[str(player["championId"])]
 			# if player["puuid"] == puuid:

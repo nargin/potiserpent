@@ -1,7 +1,7 @@
 import discord
 
 async def admin_panel(message):
-	to_say = message.content.split("ap")[1].strip()
+	to_say = message.content[3:].strip()
 	await message.delete()
 	
 	if to_say.startswith("role"):
@@ -17,9 +17,7 @@ async def admin_panel(message):
 		# 	await message.author.send(f"Role {role_name} removed from {message.author}")
 		# else:
 		roles = [role.name for role in message.guild.roles]
-		roles_weight = [role.position for role in message.guild.roles]
 		roles.remove("@everyone")
-		roles = sorted(roles)
 		embed = discord.Embed(
 			title="Roles",
 			description="Roles available on this server",
@@ -28,7 +26,7 @@ async def admin_panel(message):
 		for role in roles:
 			embed.add_field(
 				name=role,
-				value=f"Position: {roles_weight[roles.index(role)]}",
+				value="",
 				inline=False
 			)
 		await message.author.send(embed=embed)

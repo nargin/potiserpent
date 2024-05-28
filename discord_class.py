@@ -31,8 +31,8 @@ class DiscordClient(discord.Client):
 		elif self.user.mentioned_in(message):
 			await message.channel.send("Hello !")
 
-		elif message.content.startswith("!pt help"):
-			await message.channel.send("TODO 123")
-		
 		elif message.content.startswith("!pro"):
 			await self.riot.get_lolpros_game(message)
+		
+		elif message.content.startswith("!pt help"):
+			await message.channel.send("TODO 123")
