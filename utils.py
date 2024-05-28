@@ -1,6 +1,8 @@
 import datetime
 import discord
 
+MENTION_HELP = "Hello! I'm a bot created by Robin. Type `!pt help` to see the list of available commands."
+
 def time():
 	return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 

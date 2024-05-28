@@ -4,7 +4,7 @@ import os
 
 from admin import admin_panel
 from riot import RiotAPI
-from utils import time, help
+from utils import time, help, MENTION_HELP
 
 class DiscordClient(discord.Client):
 	def __init__(self, *args, **kwargs):
@@ -25,14 +25,15 @@ class DiscordClient(discord.Client):
 		if message.content.startswith("!masteries") or message.content.startswith("!m"):
 			await self.riot.get_masteries(message)
 		
-		elif message.content.startswith("!lm"):
+		elif message.content.startswith("!lm") or message.content.startswith("!lastmatch"):
 			await self.riot.get_last_match(message)
 
 		elif message.content.startswith("ap") and message.author.id == 289456071637204992:
 			await admin_panel(message)
 
 		elif self.user.mentioned_in(message):
-			await message.channel.send("Hello !")
+			await discord.Message.delete(message)
+			await message.channel.send(MENTION_HELP, delete_after=10, mention_author=True)
 
 		elif message.content.startswith("!pro"):
 			await self.riot.get_lolpros_game(message)
