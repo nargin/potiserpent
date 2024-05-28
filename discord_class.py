@@ -4,7 +4,7 @@ import os
 
 from admin import admin_panel
 from riot import RiotAPI
-from utils import time
+from utils import time, help
 
 class DiscordClient(discord.Client):
 	def __init__(self, *args, **kwargs):
@@ -35,4 +35,4 @@ class DiscordClient(discord.Client):
 			await self.riot.get_lolpros_game(message)
 		
 		elif message.content.startswith("!pt help"):
-			await message.channel.send("TODO 123")
+			await message.channel.send(embed=help())
