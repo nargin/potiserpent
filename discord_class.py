@@ -17,7 +17,10 @@ class DiscordClient(discord.Client):
 	async def on_message(self, message):
 		if message.author == self.user or message.author.bot:
 			return
-		print(f"[{time()}] Message on {message.guild.name} in {message.channel} from {message.author}: {message.content}")
+		if message.channel.type == discord.ChannelType.private:
+			print(f"[{time()}] Message from {message.author}: {message.content}")
+		else:
+			print(f"[{time()}] Message on {message.guild.name} in {message.channel} from {message.author}: {message.content}")
 		
 		if message.content.startswith("!masteries") or message.content.startswith("!m"):
 			await self.riot.get_masteries(message)
