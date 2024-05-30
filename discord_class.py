@@ -1,7 +1,6 @@
 import discord
 import json
 import os
-# from prisma import Prisma
 
 from admin import admin_panel
 from riot import RiotAPI
@@ -11,8 +10,6 @@ class DiscordClient(discord.Client):
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
 		self.riot = RiotAPI(os.getenv("RIOT_API_KEY"))
-		# self.prisma = Prisma()
-		# self.prisma.connect()
 		
 
 	async def on_ready(self):
