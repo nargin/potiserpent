@@ -6,7 +6,7 @@ from discord_class import DiscordClient
 
 load_dotenv()
 
-def main() -> None:
+def main():
 	intents = discord.Intents.default()
 	intents.message_content = True
 

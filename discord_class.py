@@ -10,8 +10,8 @@ class DiscordClient(discord.Client):
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
 		self.riot = RiotAPI(os.getenv("RIOT_API_KEY"))
+		self.alias = {}
 		
-
 	async def on_ready(self):
 		print(f"[{time()}] Logged on {self.user} as {self.user.name}")
 		
@@ -22,8 +22,6 @@ class DiscordClient(discord.Client):
 			print(f"[{time()}] Message from {message.author}: {message.content}")
 		else:
 			print(f"[{time()}] Message on {message.guild.name} in {message.channel} from {message.author}: {message.content}")
-		
-
 
 		# No parsing needed
 
@@ -36,10 +34,13 @@ class DiscordClient(discord.Client):
 			await message.channel.send(embed=help())
 			return
 		
-		elif message.content.startswith("ap") and message.author.id == 289456071637204992:
+		elif message.content.startswith("ap") and (message.author.id == 289456071637204992 or message.author.id == 1174501563063095341):
 			await admin_panel(message)
 			return
 
+		# Parsing needed
+		[command, summoner_name, tag] = self.command_parser(message.content)
+		print("return parser: ", command, summoner_name, tag)
 		# No need return last command possible
 
 		if message.content.startswith("!alias"):
@@ -53,7 +54,7 @@ class DiscordClient(discord.Client):
 
 		elif message.content.startswith("!pro"):
 			await self.riot.get_lolpros_game(message)
-	
+		
 	async def command_alias(self, message):
 		# !alias add <alias> <summoner_name>
 		# !alias remove <alias>
@@ -99,3 +100,28 @@ class DiscordClient(discord.Client):
 				await message.channel.send(f"Alias `{command}` is `{summoner_name}`")
 			else:
 				await message.channel.send(f"Alias `{command}` not found")
+
+
+	def command_parser(self, message):
+		# !m <name>#<tagLine> (<count>/<champion>)
+		# !lm <name>#<tagLine>
+		# !pro <name>#<tagLine>
+		# !alias <alias>
+		split = message.split(" ")
+		if len(split) < 2:
+			return [split[0], "", ""]
+		command = split[0]
+		print("command:", command)
+
+		# dont care about command now parsing summoner name and tag
+		# if no # then try to look in alias
+		if "#" in split[1]:
+			[summoner_name, tag] = split[1].split("#")
+		else:
+			summoner_name = split[1]
+			tag = ""
+			if summoner_name in self.alias:
+				summoner_name = self.alias[summoner_name]
+		print("summoner_name:", summoner_name)
+		print("tag:", tag)
+		return [command, summoner_name, tag]
