@@ -20,5 +20,10 @@ async def admin_panel(message):
 			)
 		await message.author.send(embed=embed)
 
+	elif to_say.startswith("id"):
+		message_id = int(to_say[3:].strip())
+		message = await message.channel.fetch_message(message_id)
+		await message.delete()
+
 	else:
 		await message.channel.send(to_say)

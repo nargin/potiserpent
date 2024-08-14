@@ -10,9 +10,11 @@ class DiscordClient(discord.Client):
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
 		self.riot = RiotAPI(os.getenv("RIOT_API_KEY"))
+		self.owner = os.getenv("OWNER_ID")
 		self.alias = {}
 		
 	async def on_ready(self):
+		print(f"[{time()}] Owner ID: {self.owner}")
 		print(f"[{time()}] Logged on {self.user} as {self.user.name}")
 		
 	async def on_message(self, message):
@@ -25,7 +27,7 @@ class DiscordClient(discord.Client):
 
 		# No parsing needed
 
-		if self.user.mentioned_in(message):
+		if self.user.mentioned_in(message) and message.mention_everyone is False:
 			await discord.Message.delete(message)
 			await message.channel.send(MENTION_HELP, delete_after=10, mention_author=True)
 			return
@@ -34,7 +36,7 @@ class DiscordClient(discord.Client):
 			await message.channel.send(embed=help())
 			return
 		
-		elif message.content.startswith("ap") and (message.author.id == 289456071637204992 or message.author.id == 1174501563063095341):
+		elif message.content.startswith("ap") and str(message.author.id) in self.owner:
 			await admin_panel(message)
 			return
 

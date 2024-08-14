@@ -1,7 +1,12 @@
+from mpl_toolkits.mplot3d import Axes3D
+import matplotlib.colors as colors
+import matplotlib.pyplot as plt
+import numpy as np
 import requests
 import discord
 import random
 import json
+import io
 
 from utils import time
 
@@ -105,8 +110,9 @@ class RiotAPI:
 				value=f"Points: {mastery['championPoints']}\nLevel: {mastery['championLevel']}",
 				inline=False
 		)
-		await message.channel.send(embed=embed)
 
+		await message.channel.send(embed=embed)
+	
 	async def get_last_match(self, message):
 		if len(message.content.split(" ")) != 2:
 			await message.channel.send("Invalid command usage")
