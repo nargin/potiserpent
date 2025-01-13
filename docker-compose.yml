@@ -1,9 +1,14 @@
 services:
-  bot:
-    image: bot
-    container_name: bot
-    build:
-      context: .
-      dockerfile: Dockerfile
-    volumes:
-      - .:/app
+    bot:
+        image: bot
+        container_name: bot
+        restart: always
+        build:
+            context: .
+            dockerfile: Dockerfile
+        volumes:
+            - .:/potiserpent
+        deploy:
+            restart_policy:
+                condition: on-failure
+                max_attempts: 5

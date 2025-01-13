@@ -1,5 +1,3 @@
 python-dotenv
 requests
 discord.py
-matplotlib
-numpy
