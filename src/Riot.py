@@ -31,17 +31,18 @@ class RiotAPI:
 
 	# GET Method :
 
+	def get_current_version_ddragon(self):
+		url = "https://ddragon.leagueoflegends.com/api/versions.json"
+		return self.get_request(url, "")
+
 	def get_champions_id(self):
-		url = "https://ddragon.leagueoflegends.com/cdn/14.10.1/data/en_US/champion.json"
+		version = self.get_current_version_ddragon()[0]
+		url = f"https://ddragon.leagueoflegends.com/cdn/{version}/data/en_US/champion.json"
 		champions_json = self.get_request(url, "")
 		champions: dict = {}
 		for champion in champions_json["data"]:
 			champions[champions_json["data"][champion]["key"]] = champion
 		return champions
-
-	def get_current_version_ddragon(self):
-		url = "https://ddragon.leagueoflegends.com/api/versions.json"
-		return self.get_request(url, "")
 
 	def get_summoner_by_name(self, name, tagLine):
 		url = "https://europe.api.riotgames.com/"

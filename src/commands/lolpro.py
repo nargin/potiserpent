@@ -65,19 +65,20 @@ async def get_lolpros_game(self, message):
 					inline=False
 				)
 
-		elif (riotId.lower() is (name + "#" + tagLine).lower()):
+		elif (riotId.lower() == (name + "#" + tagLine).lower()):
 			champion = self.champions[str(player["championId"])]
 			value = f"Champion: {champion}\n"
+			summoner_name = player['riotId'].split('#')[0]
 			if player["teamId"] == 100:
 				blueTeam.add_field(
-					name=f":question: - {player['lolpros']['name']}",
+					name=f":question: - **{summoner_name}**",
 					value=value,
 					inline=False
 				)
 				
 			elif player["teamId"] == 200:
 				redTeam.add_field(
-					name=f":question: - {player['lolpros']['name']}",
+					name=f":question: - **{summoner_name}**",
 					value=value,
 					inline=False
 				)
