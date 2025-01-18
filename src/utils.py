@@ -1,30 +1,55 @@
 import datetime
 import discord
 
-MENTION_HELP = "Hello! I'm a bot created by veigar. Type `!pt help` to see the list of available commands."
-
 def time():
-	return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 def help():
-	embed = discord.Embed(
-		title="Help",
-		description="List of available commands",
-		color=discord.Color.red()
-	)
-	embed.add_field(
-		name="!masteries or !m <name>#<tagLine> (<count>/<champion>)",
-		value="Get top 3 masteries of the summoner",
-		inline=False
-	)
-	embed.add_field(
-		name="!lm <name>#<tagLine>",
-		value="Get last match of the summoner",
-		inline=False
-	)
-	embed.add_field(
-		name="!pro <name>#<tagLine>",
-		value="Get the game of the summoner",
-		inline=False
-	)
-	return embed
+    embed = discord.Embed(
+        title="📚 League of Legends Bot Commands",
+        description="Track summoners, check masteries, and monitor games with these commands:",
+        color=discord.Color.blue(),
+        timestamp=datetime.datetime.now()
+    )
+
+    # Champion Mastery Commands
+    embed.add_field(
+        name="🏆 Champion Mastery",
+        value=(
+            "```\n!masteries <name>#<tag> [count/champion]\n"
+            "!m <name>#<tag> [count/champion]```\n"
+            "Shows champion masteries for a summoner\n"
+            "• Use `count` to see more champions (default: 3)\n"
+            "• Specify a `champion` to see mastery for that champion\n"
+            "Example: `!m Snake#EUW 5` or `!m Snake#EUW Veigar`"
+        ),
+        inline=False
+    )
+
+    # Match History Commands
+    embed.add_field(
+        name="🎮 Match History",
+        value=(
+            "```\n!lm <name>#<tag>```\n"
+            "Displays the last match played by the summoner\n"
+            "• Shows KDA, champion, and game outcome\n"
+            "• Includes match duration and game mode\n"
+            "Example: `!lm Snake#EUW`"
+        ),
+        inline=False
+    )
+
+    # Live Game Commands
+    embed.add_field(
+        name="🔴 Live Game",
+        value=(
+            "```\n!pro <name>#<tag>```\n"
+            "Checks if a summoner is currently in game\n"
+            "• Shows current game details if found\n"
+            "• Updates in real-time\n"
+            "Example: `!pro Snake#EUW`"
+        ),
+        inline=False
+    )
+
+    return embed
